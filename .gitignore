@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+out/
