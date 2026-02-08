@@ -12,3 +12,12 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Analysis {
+  id        String   @id @default(uuid())
+  text      String
+  score     Int
+  createdAt DateTime @default(now())
+
+  @@map("analyses")
+}
