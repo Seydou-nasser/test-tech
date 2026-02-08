@@ -19,3 +19,5 @@ logs/
 dist/
 build/
 out/
+
+/generated/prisma
