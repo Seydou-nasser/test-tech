@@ -115,3 +115,12 @@ Le score est calculé par le `AnalysisService` selon les règles suivantes :
 - **Bonus Longueur** : +20 points si le texte dépasse 100 caractères.
 - **Pénalité** : -10 points pour chaque mot interdit trouvé (ex: "fraude", "illégal").
 - **Bornes** : Le score final est strictement compris entre 0 et 100.
+
+## 🔮 Améliorations possibles
+
+Dans un contexte de production, plusieurs évolutions pourraient être envisagées :
+
+- Authentification et gestion des accès
+- Journalisation (logs) et monitoring
+- Externalisation des règles d’analyse via configuration ou base de données
+- Sécurisation renforcée (rate limiting, headers, etc.)
