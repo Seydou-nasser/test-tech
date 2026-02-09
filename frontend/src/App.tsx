@@ -32,7 +32,7 @@ function App() {
       <main className="app-main">
         {error && (
           <div className="error-banner">
-            <span>⚠️ {error}</span>
+            <span>{error}</span>
           </div>
         )}
 

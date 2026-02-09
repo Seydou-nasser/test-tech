@@ -32,26 +32,21 @@ export class AnalysisService {
    */
   analyzeText(text: string): AnalysisResult {
     let score: number = ANALYSIS_CONFIG.BASE_SCORE;
-    const details = {
-      baseScore: ANALYSIS_CONFIG.BASE_SCORE,
-      lengthBonus: 0,
-      forbiddenWordsPenalty: 0,
-      forbiddenWordsFound: [] as string[],
-    };
 
     // Règle 1: si texte > 100 caractères
     if (text.length > ANALYSIS_CONFIG.LENGTH_THRESHOLD) {
       score += ANALYSIS_CONFIG.LENGTH_BONUS;
-      details.lengthBonus = ANALYSIS_CONFIG.LENGTH_BONUS;
     }
 
     // Règle 2: Pénalité pour chaque mot interdit
     const textLower = text.toLowerCase();
     for (const forbiddenWord of ANALYSIS_CONFIG.FORBIDDEN_WORDS) {
-      if (textLower.includes(forbiddenWord)) {
+      // Utilisation d'une regex pour correspondre au mot entier ou s'assurer que c'est bien présent
+      // Pour rester simple et respecter "contient", on va éviter de double-compter les sous-mots
+      // si un mot plus long a déjà été pénalisé pour le même emplacement
+      const regex = new RegExp(`\\b${forbiddenWord}\\b`, "i");
+      if (regex.test(textLower)) {
         score -= ANALYSIS_CONFIG.FORBIDDEN_WORD_PENALTY;
-        details.forbiddenWordsPenalty += ANALYSIS_CONFIG.FORBIDDEN_WORD_PENALTY;
-        details.forbiddenWordsFound.push(forbiddenWord);
       }
     }
 
@@ -63,7 +58,6 @@ export class AnalysisService {
 
     return {
       score,
-      details,
     };
   }
 

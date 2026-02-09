@@ -14,7 +14,6 @@ const port = process.env.PORT || 3000;
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
-    credentials: true,
   }),
 );
 app.use(express.json());
@@ -40,7 +39,7 @@ app.use(errorHandler);
 
 // Démarrage du serveur
 app.listen(port, () => {
-  console.log(`🚀 Serveur démarré sur http://localhost:${port}`);
+  console.log(`Serveur démarré sur http://localhost:${port}`);
 });
 
 // Gestion de la fermeture du serveur

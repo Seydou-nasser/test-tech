@@ -16,10 +16,4 @@ export interface AnalyzeResponse {
 
 export interface AnalysisResult {
   score: number;
-  details: {
-    baseScore: number;
-    lengthBonus: number;
-    forbiddenWordsPenalty: number;
-    forbiddenWordsFound: string[];
-  };
 }
