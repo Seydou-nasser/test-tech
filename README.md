@@ -34,6 +34,15 @@ Ce projet est un prototype de service d'analyse de conformité de texte, compos�
 
 ## 📦 Installation et Lancement
 
+### 0. Récupération du projet
+
+Clonez le dépôt sur votre machine locale :
+
+```bash
+git clone https://github.com/Seydou-nasser/test-tech.git
+cd test-tech
+```
+
 ### Chemin le plus rapide (Docker)
 
 Assurez-vous d'avoir Docker Desktop lancé sur votre machine.
