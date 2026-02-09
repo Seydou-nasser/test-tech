@@ -14,6 +14,7 @@ function App() {
     itemsPerPage,
     totalItems,
     totalPages,
+    hasMore,
     analyzeText,
     refreshHistory,
     nextPage,
@@ -50,6 +51,7 @@ function App() {
             itemsPerPage={itemsPerPage}
             totalItems={totalItems}
             totalPages={totalPages}
+            hasMore={hasMore}
             onNext={nextPage}
             onPrev={prevPage}
             onPageChange={goToPage}

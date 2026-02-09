@@ -13,6 +13,7 @@ interface UseAnalysisResult {
   itemsPerPage: number;
   totalItems: number;
   totalPages: number;
+  hasMore: boolean;
 
   // Actions
   analyzeText: (text: string) => Promise<void>;
@@ -36,6 +37,7 @@ export function useAnalysis(): UseAnalysisResult {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -51,6 +53,7 @@ export function useAnalysis(): UseAnalysisResult {
       const response = await apiService.getHistory(itemsPerPage, offset);
       setHistory(response.data);
       setTotalItems(response.pagination.total);
+      setHasMore(response.pagination.hasMore);
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -66,10 +69,10 @@ export function useAnalysis(): UseAnalysisResult {
    * Actions de navigation
    */
   const nextPage = useCallback(() => {
-    if (currentPage < totalPages) {
+    if (hasMore) {
       setCurrentPage((prev) => prev + 1);
     }
-  }, [currentPage, totalPages]);
+  }, [hasMore]);
 
   const prevPage = useCallback(() => {
     if (currentPage > 1) {
@@ -132,6 +135,7 @@ export function useAnalysis(): UseAnalysisResult {
     itemsPerPage,
     totalItems,
     totalPages,
+    hasMore,
     analyzeText,
     refreshHistory,
     nextPage,

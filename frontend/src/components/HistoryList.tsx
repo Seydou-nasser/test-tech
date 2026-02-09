@@ -12,6 +12,7 @@ interface HistoryListProps {
   totalPages: number;
   totalItems: number;
   itemsPerPage: number;
+  hasMore: boolean;
   onNext: () => void;
   onPrev: () => void;
   onPageChange: (page: number) => void;
@@ -28,6 +29,7 @@ export function HistoryList({
   totalPages,
   totalItems,
   itemsPerPage,
+  hasMore,
   onNext,
   onPrev,
   onPageChange,
@@ -84,6 +86,7 @@ export function HistoryList({
         totalPages={totalPages}
         totalItems={totalItems}
         itemsPerPage={itemsPerPage}
+        hasMore={hasMore}
         onNext={onNext}
         onPrev={onPrev}
         onPageChange={onPageChange}

@@ -3,6 +3,7 @@ interface PaginationProps {
   totalPages: number;
   totalItems: number;
   itemsPerPage: number;
+  hasMore: boolean;
   onNext: () => void;
   onPrev: () => void;
   onPageChange: (page: number) => void;
@@ -16,6 +17,7 @@ export function Pagination({
   totalPages,
   totalItems,
   itemsPerPage,
+  hasMore,
   onNext,
   onPrev,
 }: PaginationProps) {
@@ -43,7 +45,7 @@ export function Pagination({
         </span>
         <button
           onClick={onNext}
-          disabled={currentPage === totalPages}
+          disabled={!hasMore}
           className="pagination-btn"
           aria-label="Page suivante"
         >
