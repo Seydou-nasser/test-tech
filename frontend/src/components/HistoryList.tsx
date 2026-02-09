@@ -1,11 +1,20 @@
 import type { Analysis } from "../types";
 import { getScoreClass } from "../utils/scoreUtils";
 import { formatDate, truncateText } from "../utils/formatUtils";
+import { Pagination } from "./Pagination";
 
 interface HistoryListProps {
   history: Analysis[];
   isLoading: boolean;
   onRefresh: () => Promise<void>;
+  // Props de pagination
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+  onNext: () => void;
+  onPrev: () => void;
+  onPageChange: (page: number) => void;
 }
 
 /**
@@ -15,6 +24,13 @@ export function HistoryList({
   history,
   isLoading,
   onRefresh,
+  currentPage,
+  totalPages,
+  totalItems,
+  itemsPerPage,
+  onNext,
+  onPrev,
+  onPageChange,
 }: HistoryListProps) {
   if (isLoading) {
     return (
@@ -62,6 +78,16 @@ export function HistoryList({
           </div>
         ))}
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        itemsPerPage={itemsPerPage}
+        onNext={onNext}
+        onPrev={onPrev}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }

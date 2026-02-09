@@ -9,10 +9,17 @@ interface UseAnalysisResult {
   error: string | null;
   lastScore: number | null;
   history: Analysis[];
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
 
   // Actions
   analyzeText: (text: string) => Promise<void>;
   refreshHistory: () => Promise<void>;
+  nextPage: () => void;
+  prevPage: () => void;
+  goToPage: (page: number) => void;
 }
 
 /**
@@ -25,6 +32,13 @@ export function useAnalysis(): UseAnalysisResult {
   const [lastScore, setLastScore] = useState<number | null>(null);
   const [history, setHistory] = useState<Analysis[]>([]);
 
+  // États de pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   /**
    * Récupère l'historique
    */
@@ -33,8 +47,10 @@ export function useAnalysis(): UseAnalysisResult {
     setError(null);
 
     try {
-      const response = await apiService.getHistory(50, 0);
+      const offset = (currentPage - 1) * itemsPerPage;
+      const response = await apiService.getHistory(itemsPerPage, offset);
       setHistory(response.data);
+      setTotalItems(response.pagination.total);
     } catch (err) {
       const errorMessage =
         err instanceof Error
@@ -44,7 +60,31 @@ export function useAnalysis(): UseAnalysisResult {
     } finally {
       setIsLoadingHistory(false);
     }
-  }, []);
+  }, [currentPage, itemsPerPage]);
+
+  /**
+   * Actions de navigation
+   */
+  const nextPage = useCallback(() => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  }, [currentPage, totalPages]);
+
+  const prevPage = useCallback(() => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  }, [currentPage]);
+
+  const goToPage = useCallback(
+    (page: number) => {
+      if (page >= 1 && page <= totalPages) {
+        setCurrentPage(page);
+      }
+    },
+    [totalPages],
+  );
 
   /**
    * Analyse un texte
@@ -58,8 +98,12 @@ export function useAnalysis(): UseAnalysisResult {
         const response = await apiService.analyzeText(text);
         setLastScore(response.score);
 
-        // Rafraîchir l'historique après l'analyse
-        await refreshHistory();
+        // Revenir à la première page pour voir la nouvelle analyse
+        if (currentPage !== 1) {
+          setCurrentPage(1);
+        } else {
+          await refreshHistory();
+        }
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Une erreur est survenue";
@@ -68,11 +112,11 @@ export function useAnalysis(): UseAnalysisResult {
       }
       setIsAnalyzing(false);
     },
-    [refreshHistory],
+    [currentPage, refreshHistory],
   );
 
   /**
-   * Charge l'historique au montage du composant
+   * Charge l'historique au montage ou changement de page
    */
   useEffect(() => {
     refreshHistory();
@@ -84,7 +128,14 @@ export function useAnalysis(): UseAnalysisResult {
     error,
     lastScore,
     history,
+    currentPage,
+    itemsPerPage,
+    totalItems,
+    totalPages,
     analyzeText,
     refreshHistory,
+    nextPage,
+    prevPage,
+    goToPage,
   };
 }

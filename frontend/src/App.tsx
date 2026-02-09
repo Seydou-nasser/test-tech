@@ -10,8 +10,15 @@ function App() {
     error,
     lastScore,
     history,
+    currentPage,
+    itemsPerPage,
+    totalItems,
+    totalPages,
     analyzeText,
     refreshHistory,
+    nextPage,
+    prevPage,
+    goToPage,
   } = useAnalysis();
 
   return (
@@ -39,6 +46,13 @@ function App() {
             history={history}
             isLoading={isLoadingHistory}
             onRefresh={refreshHistory}
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItems={totalItems}
+            totalPages={totalPages}
+            onNext={nextPage}
+            onPrev={prevPage}
+            onPageChange={goToPage}
           />
         </div>
       </main>
